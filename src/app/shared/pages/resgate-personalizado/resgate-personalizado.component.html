@@ -1,0 +1,80 @@
+<div>
+  <h1>DADOS DO INVESTIMENTO</h1>
+  <p-card header="">
+    <div style="display: flex; justify-content: space-between;" class="grid">
+      <div style="display: grid">
+        <span>Nome:</span>
+        <span>{{ nome }}</span>
+      </div>
+
+      <div style="display: grid">
+        <span>OBJETIVO:</span>
+        <span>{{ objetivo }}</span>
+      </div>
+
+      <div style="display: grid">
+        <span>SALDO TOTAL:</span>
+        <span>R$ {{ saldoTotal }}</span>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<h1 class="espacamento-top">RESGATE</h1>
+<p-card header="" >
+  <div class="card">
+    <p-table [value]="dadosPreencherTabela" [tableStyle]="{ 'min-width': '50rem' }"
+    dataKey="id" editMode="row">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>AÇÃO</th>
+                <th>SALDO ACUMULADO</th>
+                <th>VALOR A RESGATAR</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-investimento let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="investimento">
+                <td>{{ investimento.nome }}</td>
+                <td>R$ {{ investimento.percentual }}</td>
+                <td>
+                  <input (ngModelChange)="getInfoInput($event, investimento)" type="text" pInputText [(ngModel)]="investimento.valorResgate" realBrasilMask>
+              </td>
+            </tr>
+        </ng-template>
+    </p-table>
+  </div>
+</p-card>
+
+<div style="margin-top: 8px;">
+  <p-card header="" styleClass="card-small">
+    <div style="display: flex; justify-content: space-around" class="grid">
+      <div style="display: grid">
+        <h4>Valor Total do Resgate:</h4>
+        <span>{{ valorResgate }}</span>
+      </div>
+    </div>
+  </p-card>
+
+  <div  style="display: flex; justify-content: space-evenly; margin-top: 2rem;">
+    <button #btnSalvar pButton type="button" (click)="somarResgate()" label="CONFIRMAR RESGATE" styleClass="p-button-success"
+    [disabled]="disableBtn" ></button>
+    <button class="btn-cancel" pButton type="button" (click)="returnList()" label="CANCELAR" styleClass="p-button-secondary"></button>
+  </div>
+</div>
+
+<p-dialog header="Resgate Efetuado com sucesso!" [(visible)]="showModalSuccess" [style]="{width: '50vw'}">
+  <div class="center-div">
+    <button pButton type="button" (click)="returnList()" label="NOVO RESGATE" styleClass="p-button-secondary"></button>
+  </div>
+
+</p-dialog>
+
+<p-dialog header="DADOS INVÁLIDO" [(visible)]="showModalError" [style]="{width: '50vw'}">
+  <p>{{contentMessage}}</p>
+  <p>{{msgError}}</p>
+  <p style="white-space: pre-line">{{mensagemResgate}}</p>
+  <div class="center-div">
+    <button pButton type="button" (click)="showModalError = false" label="CORRIGIR" styleClass="p-button-secondary"></button>
+  </div>
+
+</p-dialog>
